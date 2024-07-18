@@ -8,7 +8,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class EmployeeReaderTest {
+class ResourceEmployeeReaderImplTest {
 	final ResourceEmployeeReaderImpl employeeReader = new ResourceEmployeeReaderImpl();
 
 	@Test
@@ -29,9 +29,21 @@ class EmployeeReaderTest {
 	}
 
 	@Test
-	void testReadEmployeesFromFile_InvalidLinesIgnored() throws IOException {
+	void testReadEmployeesInvalidSalary() throws IOException {
 		ResourceEmployeeReaderImpl employeeReader = new ResourceEmployeeReaderImpl();
-		List<Employee> employees = employeeReader.readEmployeesFromFile("invalid_lines.csv");
+		List<Employee> employees = employeeReader.readEmployeesFromFile("invalid_salary.csv");
+
+		assertEquals(1, employees.size());
+
+		assertEquals(123, employees.get(0).id());
+		assertEquals("Joe", employees.get(0).firstName());
+
+	}
+
+	@Test
+	void testReadEmployeesMissingFields() throws IOException {
+		ResourceEmployeeReaderImpl employeeReader = new ResourceEmployeeReaderImpl();
+		List<Employee> employees = employeeReader.readEmployeesFromFile("missing_fields.csv");
 
 		assertEquals(4, employees.size());
 
