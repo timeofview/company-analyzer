@@ -18,7 +18,7 @@ public class SalaryAnalyzer {
 				double minSalary = avgSubordinateSalary * 1.2;
 				double maxSalary = avgSubordinateSalary * 1.5;
 				if (manager.salary() < minSalary) {
-					discrepancies.put(manager, minSalary - manager.salary());
+					discrepancies.put(manager, manager.salary() - minSalary);
 				} else if (manager.salary() > maxSalary) {
 					discrepancies.put(manager, manager.salary() - maxSalary);
 				}

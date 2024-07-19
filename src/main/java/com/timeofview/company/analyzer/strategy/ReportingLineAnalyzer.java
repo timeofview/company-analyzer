@@ -8,16 +8,17 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import static com.timeofview.company.analyzer.CompanyAnalyzer.TOO_LONG_REPORT;
+
 public class ReportingLineAnalyzer {
 
-	private static final int TOO_LONG = 4;
 
 	public static Map<Employee, Integer> findEmployeesWithLongReportingLines(List<Employee> employees, Map<Integer, List<Employee>> managerToEmployees, int ceoId) {
 		Map<Employee, Integer> longReportingLines = new HashMap<>();
 		Map<Integer, Integer> depthCache = new HashMap<>();
 		for (Employee employee : employees) {
 			int depth = findDepth(employee.id(), managerToEmployees, ceoId, depthCache);
-			if (depth > TOO_LONG) {
+			if (depth > TOO_LONG_REPORT) {
 				longReportingLines.put(employee, depth);
 			}
 		}

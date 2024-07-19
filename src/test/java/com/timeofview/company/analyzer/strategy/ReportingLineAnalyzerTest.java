@@ -33,7 +33,7 @@ class ReportingLineAnalyzerTest {
 
 		Map<Employee, Integer> employeesWithLongReportingLines = ReportingLineAnalyzer.findEmployeesWithLongReportingLines(employees, managerToEmployees, 1);
 
-		assertEquals(2, employeesWithLongReportingLines.size());
+		assertEquals(1, employeesWithLongReportingLines.size());
 
 	}
 

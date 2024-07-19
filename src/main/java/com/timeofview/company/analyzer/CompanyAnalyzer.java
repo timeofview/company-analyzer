@@ -13,6 +13,7 @@ import java.util.Map;
 
 public class CompanyAnalyzer {
 
+	public static final int TOO_LONG_REPORT = 2;
 
 	public static void main(String[] args) {
 		try {
@@ -22,20 +23,32 @@ public class CompanyAnalyzer {
 			final List<Employee> employees = employeeReader.readEmployeesFromFile(fileName);
 			final Map<Integer, List<Employee>> managerToEmployees = OrganizationHelper.buildManagerToEmployeeMap(employees);
 
-			final int ceoId = 123;
+			final Employee ceo =
+					employees.stream()
+					         .filter(employee -> employee.managerId() == null)
+					         .findFirst()
+					         .orElseThrow(() -> new IllegalStateException("CEO wasn't found"));
 
 			final Map<Employee, Double> salaryDiscrepancies = SalaryAnalyzer.findManagersWithSalaryDiscrepancies(employees, managerToEmployees);
 			final Map<Employee, Integer> longReportingLines =
-					ReportingLineAnalyzer.findEmployeesWithLongReportingLines(employees, managerToEmployees, ceoId);
+					ReportingLineAnalyzer.findEmployeesWithLongReportingLines(employees, managerToEmployees, ceo.id());
 
 			System.out.println("Salary Discrepancies:");
-			salaryDiscrepancies.forEach((manager, discrepancy) ->
-					System.out.println(manager.firstName() + " " + manager.lastName() + " discrepancy: " + discrepancy)
+			salaryDiscrepancies.forEach((manager, discrepancy) -> {
+						if (discrepancy < 0) {
+							System.out.printf("Manager %s %s earns %.2f less than should%n", manager.firstName()
+									, manager.lastName(), Math.abs(discrepancy));
+						} else {
+							System.out.printf("Manager %s %s earns %.2f more than should%n", manager.firstName()
+									, manager.lastName(), discrepancy);
+						}
+					}
+
 			);
 
 			System.out.println("\nEmployees with Long Reporting Lines:");
 			longReportingLines.forEach((employee, depth) ->
-					System.out.println(employee.firstName() + " " + employee.lastName() + ": " + depth)
+					System.out.println(employee.firstName() + " " + employee.lastName() + ", by : " + (depth - TOO_LONG_REPORT))
 			);
 
 		} catch (IOException e) {

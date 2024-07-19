@@ -31,6 +31,6 @@ class SalaryAnalyzerTest {
 
 		assertEquals(2, discrepancies.size());
 		assertEquals(887500.0, discrepancies.get(manager1));
-		assertEquals(3000.0, discrepancies.get(manager2));
+		assertEquals(-3000.0, discrepancies.get(manager2));
 	}
 }
